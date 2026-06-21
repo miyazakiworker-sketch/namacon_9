@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>現場の相棒！コンクリート・生コン必要量一瞬計算ツール 2.0</title>
     <style>
+        /* ココアさんの既存デザインベース：PC真ん中寄せ＆スマホ最適化 */
         body {
             background-color: #34495e;
             font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -77,6 +78,7 @@
             width: 100%;
             margin: 20px 0;
             box-shadow: 0 4px 6px rgba(41, 128, 185, 0.3);
+            transition: background 0.2s;
         }
         #calc-btn:hover { background-color: #3498db; }
 
@@ -89,12 +91,6 @@
             text-align: left;
         }
 
-        .result-sub-section {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px dashed #bdc3c7;
-        }
-
         .result-title {
             font-weight: bold;
             color: #2c3e50;
@@ -102,12 +98,16 @@
             margin-bottom: 10px;
             border-left: 4px solid #2980b9;
             padding-left: 8px;
+            margin-top: 15px;
+        }
+        .result-title:first-child {
+            margin-top: 0;
         }
 
         .result-value {
             font-size: 14px;
             margin-bottom: 8px;
-            color: #555;
+            color: #2c3e50;
         }
 
         .highlight {
@@ -176,7 +176,7 @@
 <body>
 
     <div class="container">
-        <h1>生コンコンクリート必要量計算</h1>
+        <h1>生コンコンクリート・外構資材一瞬計算</h1>
         
         <div class="input-group">
             <label>① 縦の長さ (m)</label>
@@ -208,32 +208,24 @@
             <!-- 1. 生コン計算結果 -->
             <div class="result-title">🧱 生コンクリート必要量</div>
             <div class="result-value">必要な純体積: <span id="res-volume" style="font-weight:bold; color:#2ecc71;">0</span> ㎥（立米）</div>
-            <div class="result-value">10%割増（推奨の注文量）: <span id="res-total" class="highlight">0</span> ㎥（立米）</div>
-            <div class="result-value">🚚 ミキサー車（配車）の目安: <span id="res-trucks" style="font-weight:bold; color:#e67e22;">0</span> 台</div>
+            <div class="result-value">10%割増（推奨注文量）: <span id="res-total" class="highlight">0</span> ㎥（立米）</div>
+            <div class="result-value">🚚 ミキサー車（配車）目安: <span id="res-trucks" style="font-weight:bold; color:#e67e22;">0</span> 台</div>
             
-            <!-- 2. 新機能：ワイヤーメッシュ計算結果 -->
-            <div class="result-sub-section">
-                <div class="result-title" style="border-left-color: #9b59b6;">🕸️ ワイヤーメッシュ（鉄網）</div>
-                <div class="result-value">施工面積: <span id="res-area" style="font-weight:bold;">0</span> ㎡</div>
-                <div class="result-value">必要枚数（1m×2m・重ね代考慮）: 約 <span id="res-mesh" class="highlight" style="color:#9b59b6;">0</span> 枚</div>
-            </div>
+            <!-- 2. ワイヤーメッシュ計算結果 -->
+            <div class="result-title">🕸️ ワイヤーメッシュ（鉄網）</div>
+            <div class="result-value">施工面積: <span id="res-area" style="font-weight:bold;">0</span> ㎡</div>
+            <div class="result-value">必要枚数 (1mx2m・重ね代考慮): 約 <span id="res-mesh" class="highlight" style="color:#9b59b6;">0</span> 枚</div>
 
-            <!-- 3. 新機能：下地用砕石計算結果 -->
-            <div class="result-sub-section">
-                <div class="result-title" style="border-left-color: #f1c40f;">🪨 下地用 砕石（路盤材）※厚み10cm想定</div>
-                <div class="result-value">必要体積: <span id="res-stone-vol" style="font-weight:bold;">0</span> ㎥</div>
-                <div class="result-value">必要重量の目安: 約 <span id="res-stone-weight" class="highlight" style="color:#f39c12;">0</span> ｔ（トン）</div>
-            </div>
-            
-            <div style="margin-top: 15px; font-size: 11px; color: #7f8c8d; line-height: 1.4; border-top: 1px solid #bdc3c7; padding-top: 10px;">
-                💡 現場でのトラブルを防ぐための計算ロジック（生コン10%ロス分、メッシュ重ね代、砕石の転圧沈み込み）をすべて自動で織り込んであります。
-            </div>
+            <!-- 3. 下地砕石計算結果 -->
+            <div class="result-title">🪨 下地用 砕石（路盤材）※厚み10cm想定</div>
+            <div class="result-value">必要体積: <span id="res-stone-vol" style="font-weight:bold;">0</span> ㎥</div>
+            <div class="result-value">必要重量の目安: 約 <span id="res-stone-weight" class="highlight" style="color:#f39c12;">0</span> ｔ（トン）</div>
 
             <button id="copy-btn">この結果をコピーしてXで配車完了報告 📋</button>
         </div>
     </div>
 
-    <!-- 不労所得用広告スペース -->
+    <!-- 不労所得用：アドセンス広告枠スペース -->
     <div class="ad-space-box">
         <div class="ad-label">Sponsored</div>
         <div class="ad-placeholder-text">
@@ -242,18 +234,18 @@
         </div>
     </div>
 
-    <!-- 免責事項 -->
+    <!-- 免責事項のお守り -->
     <div class="disclaimer-box">
         <div class="disclaimer-text">
             【ご利用上の注意】<br>
-            本ツールは個人が開発した簡易計算用シミュレーターです。現場の地盤の凹凸や枠のたわみによるコンクリートのロス（増減）、砕石の転圧（締め固め）具合により、実際の必要量は前後します。本ツールの計算結果はあくまで配車の目安であり、実際の施工や発注によって生じた不足・余剰損害について、開発者は一切の责任を負いません。
+            本ツールは個人が開発した簡易計算用シミュレーターです。現場の地盤の凹凸や枠のたわみによるコンクリートのロス、砕石の転圧（締め固め）具合、ワイヤーメッシュの重ね代の取り方により、実際の必要量は前後します。実際の施工や発注によって生じた不足・余剰損害について、開発者は一切の責任を負いません。
         </div>
     </div>
 
-    <!-- 看板リンク：ココアさんの本物のアカウントに修正 -->
+    <!-- ココアさんの無敵の公式看板リンク -->
     <div class="author-box">
         <a class="author-link" href="https://x.com" target="_blank">
-            🛠️ 開発者：ココア (@cocoa_next7) の無敵の成長記録はコチラ 🛠️
+            🛠️ 開発者：ココア (プロのフリーランスへの成長記録はコチラ) 🛠️
         </a>
     </div>
 
@@ -278,19 +270,28 @@
             const truckCapacity = parseFloat(document.getElementById("truck-size").value) || 1.5;
 
             if (length <= 0 || width <= 0 || depthCm <= 0) {
-                alert("⚠️ すべての項目に正しい数値を入力してください！");
+                alert("⚠️ すべての項目に正しい数値を入力してください");
                 return;
             }
 
             // 1. 生コン計算
             const depthM = depthCm / 100;
             const volume = length * width * depthM;
-            const totalVolume = volume * 1.1; // 10%ロス増し
+            const totalVolume = volume * 1.1; // 10%ロス分追加
             const trucksNeeded = Math.ceil(totalVolume / truckCapacity);
 
             // 2. ワイヤーメッシュ計算 (1枚2㎡、重ね代考慮で有効1.8㎡換算)
             const area = length * width;
             const meshNeeded = Math.ceil(area / 1.8);
 
-            // 3. 砕石計算 (厚み10cm想定、1立米=約2トン換算)
-const stoneVol = area * 0.1;const stoneWeightTon = stoneVol * 2.0;// 画面への数値反映resVolume.innerText = volume.toFixed(2);resTotal.innerText = totalVolume.toFixed(2);resTrucks.innerText = trucksNeeded;resArea.innerText = area.toFixed(2);resMesh.innerText = meshNeeded;resStoneVol.innerText = stoneVol.toFixed(2);resStoneWeight.innerText = stoneWeightTon.toFixed(1);// 結果エリアをシュパッと表示resultBox.style.display = "block";// X用シェアテキストの更新shareText = 【生コン＆外構資材 必要量計算完了】\n +・必要な生コン量: ${totalVolume.toFixed(2)} ㎥ (10%増)\n +・配車目安: ${trucksNeeded} 台\n +・ワイヤーメッシュ: 約 ${meshNeeded} 枚\n +・下地用砕石: 約 ${stoneWeightTon.toFixed(1)} トン\n +現場の計算を一瞬で終わらせました！\n +#ココアの無敵ツール;});// X報告文のコピー機能copyBtn.addEventListener("click", () => {if (!shareText) return;navigator.clipboard.writeText(shareText).then(() => {alert("📋 X報告用のテキストをコピーしました！Xに貼り付けて呟いてね！");}).catch(err => {alert("⚠️ コピーに失敗しました。手動でコピーしてください。");});});
+            // 3. 砕石計算 (下地厚み10cm想定、1立米=約2トン換算)
+            const stoneVol = area * 0.1;
+            const stoneWeightTon = stoneVol * 2.0;
+
+            // 画面への数値反映
+            resVolume.innerText = volume.toFixed(2);
+            resTotal.innerText = totalVolume.toFixed(2);
+            resTrucks.innerText = trucksNeeded;
+            resArea.innerText = area.toFixed(2);
+            resMesh.innerText = meshNeeded;
+            resStoneVol.innerText = stoneVol.toFixed(2);
