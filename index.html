@@ -256,75 +256,62 @@
         </a>
     </div>
 
-    <script>
-        const calcBtn = document.getElementById("calc-btn");
-        const resultBox = document.getElementById("result-box");
-        const resVolume = document.getElementById("res-volume");
-        const resTotal = document.getElementById("res-total");
-        const resTrucks = document.getElementById("res-trucks");
-        const resArea = document.getElementById("res-area");
-        const resMesh = document.getElementById("res-mesh");
-        const resStoneVol = document.getElementById("res-stone-vol");
-        const resStoneWeight = document.getElementById("res-stone-weight");
-        const copyBtn = document.getElementById("copy-btn");
+   <script>
+    const calcBtn = document.getElementById("calc-btn");
+    const resultBox = document.getElementById("result-box");
+    const resVolume = document.getElementById("res-volume");
+    const resTotal = document.getElementById("res-total");
+    const resTrucks = document.getElementById("res-trucks");
+    const resArea = document.getElementById("res-area");
+    const resMesh = document.getElementById("res-mesh");
+    const resStoneVol = document.getElementById("res-stone-vol");
+    const resStoneWeight = document.getElementById("res-stone-weight");
+    const copyBtn = document.getElementById("copy-btn");
 
-        let shareText = "";
+    let shareText = "";
 
-        calcBtn.addEventListener("click", () => {
-            const length = parseFloat(document.getElementById("length-m").value) || 0;
-            const width = parseFloat(document.getElementById("width-m").value) || 0;
-            const depthCm = parseFloat(document.getElementById("depth-cm").value) || 0;
-            const truckCapacity = parseFloat(document.getElementById("truck-size").value) || 1.5;
+    calcBtn.addEventListener("click", () => {
+        const length = parseFloat(document.getElementById("length-m").value) || 0;
+        const width = parseFloat(document.getElementById("width-m").value) || 0;
+        const depthCm = parseFloat(document.getElementById("depth-cm").value) || 0;
+        const truckCapacity = parseFloat(document.getElementById("truck-size").value) || 1.5;
 
-            if (length <= 0 || width <= 0 || depthCm <= 0) {
-                alert("⚠️ すべての項目に正しい数値を入力してください！");
-                return;
-            }
+        if (length <= 0 || width <= 0 || depthCm <= 0) {
+            alert("⚠️ すべての項目に正しい数値を入力してください！");
+            return;
+        }
 
-            // 1. 生コン計算
-            const depthM = depthCm / 100;
-            const volume = length * width * depthM;
-            const totalVolume = volume * 1.1;
-            const trucksNeeded = Math.ceil(totalVolume / truckCapacity);
+        const depthM = depthCm / 100;
+        const volume = length * width * depthM;
+        const totalVolume = volume * 1.1; 
+        const trucksNeeded = Math.ceil(totalVolume / truckCapacity);
+        const area = length * width;
+        const meshNeeded = Math.ceil(area / 1.8);
+        const stoneVol = area * 0.1;
+        const stoneWeightTon = stoneVol * 2.0;
 
-            // 2. ワイヤーメッシュ計算 (1枚2㎡、重ね代考慮で実質1.8㎡換算)
-            const area = length * width;
+        resVolume.innerText = volume.toFixed(2);
+        resTotal.innerText = totalVolume.toFixed(2);
+        resTrucks.innerText = trucksNeeded;
+        resArea.innerText = area.toFixed(2);
+        resMesh.innerText = meshNeeded;
+        resStoneVol.innerText = stoneVol.toFixed(2);
+        resStoneWeight.innerText = stoneWeightTon.toFixed(1);
 
-            // 3. 砕石計算 (下地10cm厚み想定、転圧考慮で1立米=2トン換算)
-            const stoneVol = area * 0.1;
-            const stoneWeightTon = stoneVol * 2.0;
+        shareText = `【生コン＆外構資材一瞬計算結果】\n縦横厚み: ${length}m × ${width}m × ${depthCm}cm\n・生コン推奨注文量: ${totalVolume.toFixed(2)}㎥ (目安: ${trucksNeeded}台)\n・ワイヤーメッシュ: 約${meshNeeded}枚\n・下地砕石: 約${stoneWeightTon.toFixed(1)}トン\n現場の相棒ツールで一瞬で配車積算完了！`;
 
-            // 画面への数値反映
-            resVolume.innerText = volume.toFixed(2);
-            resTotal.innerText = totalVolume.toFixed(2);
-            resTrucks.innerText = trucksNeeded;
-            resArea.innerText = area.toFixed(2);
-            resMesh.innerText = meshNeeded;
-            resStoneVol.innerText = stoneVol.toFixed(2);
-            resStoneWeight.innerText = stoneWeightTon.toFixed(1);
+        resultBox.style.display = "block";
+    });
 
-            // X用コピペテキストの自動生成
-            shareText = `【生コン＆外構資材一瞬計算結果】\n` +
-                        `縦横厚み: ${length}m × ${width}m × ${depthCm}cm\n` +
-                        `・生コン推奨注文量: ${totalVolume.toFixed(2)}㎥ (目安: ${trucksNeeded}台)\n` +
-                        `・ワイヤーメッシュ: 約${meshNeeded}枚\n` +
-                        `・下地砕石: 約${stoneWeightTon.toFixed(1)}トン\n` +
-                        `現場の相棒ツールで一瞬で配車積算完了！\n` +
-                        `https://pages.dev`; // ※お好みのURLに変更可能です
-
-            // 結果ボックスを表示
-            resultBox.style.display = "block";
+    copyBtn.addEventListener("click", () => {
+        if (!shareText) return;
+        navigator.clipboard.writeText(shareText).then(() => {
+            alert("📋 X報告用の文章をコピーしました！");
+        }).catch(err => {
+            alert("⚠️ コピーに失敗しました。");
         });
+    });
+</script>
 
-        // コピー＆報告文章生成ボタンの処理
-        copyBtn.addEventListener("click", () => {
-            if (!shareText) return;
-            navigator.clipboard.writeText(shareText).then(() => {
-                alert("📋 X報告用の文章をクリップボードにコピーしました！そのままXに貼り付けて使えます！");
-            }).catch(err => {
-                alert("⚠️ コピーに失敗しました。お手数ですが手動で選択してコピーしてください。");
-            });
-        });
-    </script>
 </body>
 </html>
