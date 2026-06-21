@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>現場の相棒！コンクリート・生コン必要量一瞬計算ツール 2.0</title>
     <style>
-        /* ココアさんの元のデザイン・カラーを完全継承 */
         body {
             background-color: #34495e;
             font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -40,7 +39,7 @@
             padding-bottom: 10px;
         }
 
-        h2 {
+        .result-title {
             font-size: 14px;
             color: #2c3e50;
             text-align: left;
@@ -48,6 +47,7 @@
             padding-left: 8px;
             margin-top: 20px;
             margin-bottom: 10px;
+            font-weight: bold;
         }
 
         .input-group {
@@ -98,15 +98,6 @@
             border-radius: 12px;
             margin-top: 20px;
             text-align: left;
-        }
-
-        .result-title {
-            font-weight: bold;
-            color: #2c3e50;
-            font-size: 15px;
-            margin-bottom: 10px;
-            border-left: 4px solid #2ecc71;
-            padding-left: 8px;
         }
 
         .result-value {
@@ -250,6 +241,7 @@
         </div>
     </div>
 
+    <!-- プロ仕様の免責お守り -->
     <div class="disclaimer-box">
         <div class="disclaimer-text">
             【ご利用上の注意】<br>
@@ -257,7 +249,7 @@
         </div>
     </div>
 
-    <!-- ココアさんの本物のXアカウントへの導線看板 -->
+    <!-- 看板リンク -->
     <div class="author-box">
         <a class="author-link" href="https://x.com" target="_blank">
             🛠️ 開発者：ココア (@cocoa_next7) プロのフリーランスへの成長記録はコチラ 🛠️
@@ -292,43 +284,45 @@
             // 1. 生コン計算
             const depthM = depthCm / 100;
             const volume = length * width * depthM;
-const totalVolume = volume * 1.1; // 10%ロス分const trucksNeeded = Math.ceil(totalVolume / truckCapacity);// 2. ワイヤーメッシュ計算 (1枚2㎡、重ね代考慮で実質1.8㎡換算)const area = length * width;const meshNeeded = Math.ceil(area / 1.8);// 3. 砕石計算 (下地10cm厚み想定、転圧考慮で1立米=2トン換算)const stoneVol = area * 0.1;const stoneWeightTon = stoneVol * 2.0;// 画面への数値反映resVolume.innerText = volume.toFixed(2);resTotal.innerText = totalVolume.toFixed(2);resTrucks.innerText = trucksNeeded;resArea.innerText = area.toFixed(2);resMesh.innerText = meshNeeded;resStoneVol.innerText = stoneVol.toFixed(2);resStoneWeight.innerText = stoneWeightTon.toFixed(1);// 結果ボックスを表示resultBox.style.display = "block";// X用コピペテキストの自動生成shareText = 【生コン＆外構資材一瞬計算結果】\n +縦横厚み: ${length}m × ${width}m × ${depthCm}cm\n +・生コン推奨注文量: ${totalVolume.toFixed(2)}㎥ (目安: ${trucksNeeded}台)\n +・ワイヤーメッシュ: 約${meshNeeded}枚\n +・下地砕石: 約${stoneWeightTon.toFixed(1)}トン\n +現場の相棒ツールで一瞬で配車積算完了！\n +https://pages.dev; // ※実際のCloudflare PagesのURLに変えてもOKです});// コピー＆報告文章生成ボタンの処理copyBtn.addEventListener("click", () => {if (!shareText) return;navigator.clipboard.writeText(shareText).then(() => {alert("📋 X報告用の文章をクリップボードにコピーしました！そのままXに貼り付けて使えます！");}).catch(err => {alert("⚠️ コピーに失敗しました。お手数ですが手動で選択してコピーしてください。");});});
-            // ーーー ここから下を追記 ーーー
+            const totalVolume = volume * 1.1;
+            const trucksNeeded = Math.ceil(totalVolume / truckCapacity);
 
-            // 1. 生コン計算結果の反映
-            resVolume.innerText = volume.toFixed(2);
-            resTotal.innerText = totalVolume.toFixed(2);
-            resTrucks.innerText = trucksNeeded;
-
-            // 2. 新機能：ワイヤーメッシュ枚数の計算（面積 ÷ 有効1.8㎡）
+            // 2. ワイヤーメッシュ計算 (1枚2㎡、重ね代考慮で実質1.8㎡換算)
             const area = length * width;
-            const meshNeeded = Math.ceil(area / 1.8);
 
-            // 3. 新機能：下地用砕石の計算（厚み10cm想定、1立米＝2トン換算）
+            // 3. 砕石計算 (下地10cm厚み想定、転圧考慮で1立米=2トン換算)
             const stoneVol = area * 0.1;
             const stoneWeightTon = stoneVol * 2.0;
 
-            // X（Twitter）への安全な報告文章の生成
-            shareText = `【生コン配車計算完了】\n` +
-                        `施工面積: ${area.toFixed(1)}㎡\n` +
-                        `必要量(ロス10%増): ${totalVolume.toFixed(2)}㎥\n` +
-                        `ミキサー車目安: ${trucksNeeded}台\n` +
-                        `ワイヤーメッシュ: 約${meshNeeded}枚\n` +
-                        `下地砕石: 約${stoneWeightTon.toFixed(1)}トン\n` +
-                        `現場の相棒ツールで一瞬計算！\n` +
-                        `#ココアの無敵開発ライフ`;
+            // 画面への数値反映
+            resVolume.innerText = volume.toFixed(2);
+            resTotal.innerText = totalVolume.toFixed(2);
+            resTrucks.innerText = trucksNeeded;
+            resArea.innerText = area.toFixed(2);
+            resMesh.innerText = meshNeeded;
+            resStoneVol.innerText = stoneVol.toFixed(2);
+            resStoneWeight.innerText = stoneWeightTon.toFixed(1);
 
-            // 表示をシュパッとON
+            // X用コピペテキストの自動生成
+            shareText = `【生コン＆外構資材一瞬計算結果】\n` +
+                        `縦横厚み: ${length}m × ${width}m × ${depthCm}cm\n` +
+                        `・生コン推奨注文量: ${totalVolume.toFixed(2)}㎥ (目安: ${trucksNeeded}台)\n` +
+                        `・ワイヤーメッシュ: 約${meshNeeded}枚\n` +
+                        `・下地砕石: 約${stoneWeightTon.toFixed(1)}トン\n` +
+                        `現場の相棒ツールで一瞬で配車積算完了！\n` +
+                        `https://pages.dev`; // ※お好みのURLに変更可能です
+
+            // 結果ボックスを表示
             resultBox.style.display = "block";
         });
 
-        // Xへの報告文章コピー機能
+        // コピー＆報告文章生成ボタンの処理
         copyBtn.addEventListener("click", () => {
             if (!shareText) return;
             navigator.clipboard.writeText(shareText).then(() => {
-                alert("📋 Xへの報告文章をクリップボードにコピーしました！そのままXに貼り付けてください。");
+                alert("📋 X報告用の文章をクリップボードにコピーしました！そのままXに貼り付けて使えます！");
             }).catch(err => {
-                alert("⚠️ コピーに失敗しました。ブラウザの権限を許可してください。");
+                alert("⚠️ コピーに失敗しました。お手数ですが手動で選択してコピーしてください。");
             });
         });
     </script>
